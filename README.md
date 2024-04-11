@@ -23,7 +23,7 @@ The subdivision implementation, as I understand it, is composed of basically two
 
 So what is 'some stuff'? Well, to apply the algorithm to a tri/quad you need to have access to the neighbors of each face, neighbors of each corner, the midpoints of each edge of the face and other similar data. While iterating through the faces, it would be a waste of time to find this information. So I chose to precompute and put it in dictionaries beforehand.
 
-```
+```c++
 std::unordered_map<std::pair<int, int>, std::vector<Quad>, PairHash> nqe; // The quads that touch a given edge
 std::unordered_map<int, std::vector<Quad>> nqp; // The faces that touch a given vertex
 std::unordered_map<int, std::unordered_set<std::pair<int, int>, PairHash>> nep; // The edges that touch a given vertex 
