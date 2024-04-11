@@ -85,3 +85,22 @@ The code above is executed in a loop. Before this snippet runs, keyboard events 
 ```cpp
 glm::translate(tetra_obj.draw_data.transformation, glm::vec3(-1.5 + glm::sin(rot_tetra), -0.5, -8));
 ```
+
+## Performance
+
+Performance in debug mode for each subdivision level is as follows:
+
+| Level 0 | Level 1 | Level 2 | Level 3 | Level 4 |
+|---------|---------|---------|---------|---------|
+| 240fps  | 240fps  | 220fps  | 215fps  | 240fps  |
+
+Performance does not seem to be affected much by the subdivision level, as the bottleneck is most likely the draw calls. I believe that we would need the drastically increase the vertex count to observe its effect on performance.
+
+## Moments where I got stuck
+
+1. In Blender, the default settings for the algorithm do an additional optimization that differs from the original paper of the algorithm. I did not notice this at first and thought that my implementation was wrong when Blender was giving different results. Adjusting the settings fixed the issue.
+2. Not a specific moment but I wasted a lot of time on off-by-one errors when writing the triangulation code. Saving the broken result to a file and inspecting it in Blender was a life-saver.
+
+## Interesting design choice
+
+Contrary to the homework text, I decided to precalculate all subdivision levels for each mesh before the rendering starts. I believe that this is a better choice as it eliminates the lag when switching between levels in run-time. But, as a tradeoff the startup time is increased.
