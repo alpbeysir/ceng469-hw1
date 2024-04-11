@@ -1,5 +1,4 @@
-# CENG469 - Computer Graphics II
-  Homework 1, Catmull-Clark Subdivision
+# Computer Graphics II - Catmull-Clark Subdivision
 
 I began by inspecting the outputs of the algorithm for some sample meshes in Blender. This helped me get a feel for the algorithm. Then, I looked online for simple descriptions and explanations. I believed that I had to understand the algorithm well before implementing it, as doing so would probably save a lot of debugging time. For graphics algorithms, making the first implementation as correct as possible is important because they are harder to debug than conventional algorithms.
 
