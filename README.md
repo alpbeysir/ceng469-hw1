@@ -79,3 +79,9 @@ for (const auto& obj : objects) {
     draw_model(obj->levels[obj->cur_level], shader, obj->draw_data, light_pos, camera_pos, draw_mode);
 }
 ```
+
+The code above is executed in a loop. Before this snippet runs, keyboard events are processed to adjust the rendering based on the user input. User input may change or reset the subdivision level of the rendered meshes, cycle through draw modes or play/pause the animation. The animation is implemented in the simplest way possible, by transforming the model matrix of one of the meshes in a sine wave pattern.
+
+```cpp
+glm::translate(tetra_obj.draw_data.transformation, glm::vec3(-1.5 + glm::sin(rot_tetra), -0.5, -8));
+```
