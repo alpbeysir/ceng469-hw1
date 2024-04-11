@@ -7,4 +7,16 @@ My platform was Windows 10 and Visual Studio 2022. I began coding by copying a '
 
 ## OBJ Loader
 
-The sample OBJ loader did not support all the features I wanted and was not written in my style. So I decided to replace it. This was trivial and involved learning about the simple OBJ format from some page online, then writing a parser. 
+The sample OBJ loader did not support all the features I wanted and was not written in my style. So I decided to replace it. This was trivial and involved learning about the simple OBJ format from some page online, then writing a parser.
+At this step I also had to decide on the internal mesh struct/format I would use. Since it was my first implementation of the algorithm, I did not wish to make assumptions about the what would be the most comfortable way to store the mesh data. Therefore I kept it very flexible with just four arrays of structs for vertex, normal, quad and triangle data respectively (the homework only allows tri and quad topologies).
+
+## Catmull-Clark Subdivision
+
+The algorithm has two inputs, a mesh and an integer (level) describing how many times to apply the algorithm. The output is another mesh. I started by defining a function that would do one iteration for quad topologies. I thought I would deal with triangle topologies later. Also, one could write a generic function for all polygons, but since I was only dealing with tris and quads I did not wish to get confused thinking about generalized code. 
+
+### Mesh subdivide_quad(Mesh mesh)
+
+The subdivision implementation, as I understand it, is composed of basically two steps:
+
+1. Precompute some stuff we will need later.
+2. Access the precomputations and calculate the new state of each tri/quad.
