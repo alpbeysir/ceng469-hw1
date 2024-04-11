@@ -16,10 +16,10 @@ The algorithm has two inputs, a mesh and an integer (level) describing how many 
 
 ### Mesh subdivide_quad(Mesh mesh)
 
-The subdivision implementation, as I understand it, is composed of basically two steps:
+The subdivision implementation is composed of two for loops over the faces:
 
-1. Precompute some stuff we will need later.
-2. Access the precomputations and calculate the new state of each tri/quad.
+1. For each face, precompute some stuff we will need later.
+2. For each face, access the precomputation results and calculate the new state of each tri/quad.
 
 So what is 'some stuff'? Well, to apply the algorithm to a tri/quad you need to have access to the neighbors of each face, neighbors of each corner, the midpoints of each edge of the face and other similar data. While iterating through the faces, it would be a waste of time to find this information. So I chose to precompute and put it in dictionaries beforehand.
 
@@ -28,3 +28,28 @@ std::unordered_map<std::pair<int, int>, std::vector<Quad>, PairHash> nqe; // The
 std::unordered_map<int, std::vector<Quad>> nqp; // The faces that touch a given vertex
 std::unordered_map<int, std::unordered_set<std::pair<int, int>, PairHash>> nep; // The edges that touch a given vertex 
 ```
+
+After, I apply the algorithm to each face. This step consists of applying some formulas to generate the positions of 9 points that will form the 4 faces for each original face. I won't go into details as the focus is on the specifics of my implementation and not the algorithm.
+
+### Subdivision pyramid
+
+For the homework we will need to render the same mesh at different levels of subdivision, so I use the described `subdivide` function to fill an array with all needed levels before the rendering stage. Since the output of the algorithm is not exactly suitable for rendering, an additional `load_model` function is used before saving the subdivided model. This function will be described next.
+
+```cpp
+void precompute(const Mesh& mesh) {
+    Mesh tmp = mesh;
+    for (int i = 0; i < MAX_SUBDIVIDE; i++) {
+        levels.push_back(load_model(tmp));
+        tmp = subdivide(tmp);
+    }
+}
+```
+
+## Processing the subdivided mesh 
+
+As mentioned above, I needed to further process the mesh before the GL stage. The function `ModelData load_model(const Mesh& input)` is responsible for two things:
+
+### Triangulation & normals
+
+### GL buffer generation
+
