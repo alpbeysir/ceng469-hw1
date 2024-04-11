@@ -70,3 +70,12 @@ This step will upload the generated mesh to the GPU and save the indexes & sizes
 
 I did not mention this before but for the homework it was also required to render the meshes as a wireframe. The simplest way to do this was to just have another index buffer for the line data. The buffer is generated and returned in the struct for later use.
 
+## Main rendering loop
+
+The drawing is very straightforward. The `draw_model` function takes in the object data and the draw mode which signifies if it is wireframe, wireframe with occlusion or solid. The other parameters are self-explanatory. 
+
+```cpp
+for (const auto& obj : objects) {
+    draw_model(obj->levels[obj->cur_level], shader, obj->draw_data, light_pos, camera_pos, draw_mode);
+}
+```
