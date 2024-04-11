@@ -33,7 +33,7 @@ After, I apply the algorithm to each face. This step consists of applying some f
 
 ### Subdivision pyramid
 
-For the homework we will need to render the same mesh at different levels of subdivision, so I use the described `subdivide` function to fill an array with all needed levels before the rendering stage. Since the output of the algorithm is not exactly suitable for rendering, an additional `load_model` function is used before saving the subdivided model. This function will be described next.
+For the homework I needed to render the same mesh at different levels of subdivision, so I used the described `subdivide` function to fill an array with all needed levels before the rendering stage. Since the output of the algorithm is not exactly suitable for rendering, an additional `load_model` function is used before saving the subdivided model. This function will be described next.
 
 ```cpp
 void precompute(const Mesh& mesh) {
@@ -45,11 +45,28 @@ void precompute(const Mesh& mesh) {
 }
 ```
 
-## Processing the subdivided mesh 
+## Processing the subdivided mesh
 
-As mentioned above, I needed to further process the mesh before the GL stage. The function `ModelData load_model(const Mesh& input)` is responsible for two things:
+As mentioned above, I needed to further process the mesh before the GL stage. The function `ModelData load_model(const Mesh& input)` is responsible for three things which it accomplishes in three steps:
 
 ### Triangulation & normals
 
+OpenGL cannot render quads directly, so triangulation was needed. Also, the algorithm generates meshes but not normals. The first stage of the `load_model` function looks at the input mesh to see if it is of quad or triangle topology, as the required computation will change based on this. 
+
+For quads, the function will do for each quad:
+1. Calculate a normal based on the four corners.
+2. Generate six vertices with the computed normal.
+3. Generated two triangles from the vertices.
+
+For triangles, the function will do for each triangle:
+1. Calculate a normal based on the three corners.
+2. Done :)
+
 ### GL buffer generation
+
+This step will upload the generated mesh to the GPU and save the indexes & sizes of these buffers to the returned `ModelData` struct instance, which will later be used to tell OpenGL which mesh to render. This step is composed of a bunch of GL API calls.
+
+### Line rendering preparation
+
+I did not mention this before but for the homework it was also required to render the meshes as a wireframe. The simplest way to do this was to just have another index buffer for the line data. The buffer is generated and returned in the struct for later use.
 
