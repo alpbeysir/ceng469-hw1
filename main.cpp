@@ -19,6 +19,11 @@ float rot_tetra = 0.0f;
 std::vector<SceneObject*> objects;
 DrawMode draw_mode;
 
+// Globals
+int frameCount = 0;
+double currentTime = 0.0;
+double previousTime = 0.0;
+
 void reshape(GLFWwindow* window, int w, int h)
 {
     w = w < 1 ? 1 : w;
@@ -81,6 +86,26 @@ void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
         draw_mode = (DrawMode)tmp;
     }
 }
+
+// Function to update FPS
+void updateFPS() {
+    // Calculate time difference
+    currentTime = glfwGetTime();
+    double timeInterval = currentTime - previousTime;
+
+    if (timeInterval > 1.0) { // Update FPS every second
+        // Calculate FPS
+        float fps = frameCount / timeInterval;
+
+        // Output FPS to console
+        std::cout << "FPS: " << fps << std::endl;
+
+        // Reset variables
+        previousTime = currentTime;
+        frameCount = 0;
+    }
+}
+
 
 int main(int argc, char** argv)
 {
@@ -182,8 +207,14 @@ int main(int argc, char** argv)
             draw_model(obj->levels[obj->cur_level], shader, obj->draw_data, light_pos, camera_pos, draw_mode);
         }
 
+        // Increment frame count
+        frameCount++;
+
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        // Update FPS
+        updateFPS();
     }
 
     glfwDestroyWindow(window);
